@@ -341,7 +341,7 @@ body[data-theme="mint"] { background-image: radial-gradient(ellipse at 10% 12%,#
 .full-arcade .arcade-game-card > small { color: var(--green); }
 .full-arcade .arcade-game-card .game-preview { height: 96px; }
 .full-arcade .arcade-game-card.external-game-card { grid-template-rows: auto 144px auto 1fr auto auto; }
-.full-arcade .arcade-game-card .game-cover { width: 144px; max-width: 100%; height: 144px; aspect-ratio: 1; border: 0; border-radius: 0; object-fit: cover; }
+.full-arcade .arcade-game-card .game-cover { width: 100%; max-width: 100%; height: 144px; aspect-ratio: auto; border: 0; border-radius: 0; object-fit: contain; background: #0b1429; }
 .arcade-game-card .game-preview * { animation-play-state: running; }
 .preview-tetris i { animation-duration: 2.4s; }
 .preview-mines b { transform-origin: center; animation: preview-mine 1.8s ease-in-out infinite alternate; }

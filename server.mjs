@@ -32,7 +32,7 @@ const server = createServer(handleRequest);
 const sockets = new WebSocketServer({ noServer: true, maxPayload: 2048 });
 const requestBuckets = new Map();
 const chatBuckets = new Map();
-const mimeTypes = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg' };
+const mimeTypes = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.png': 'image/png' };
 const configuredOrigins = new Set((process.env.ALLOWED_ORIGINS || '').split(',').map((origin) => origin.trim()).filter(Boolean));
 
 function originAllowed(origin, requestHost) {
@@ -148,7 +148,25 @@ async function handleRequest(request, response) {
     }
     if (url.pathname.startsWith('/api/')) return sendJson(response, 404, { error: 'Not found.' });
 
-    const staticFiles = new Map([['/', 'index.html'], ['/index.html', 'index.html'], ['/arcade.css', 'arcade.css'], ['/arcade.js', 'arcade.js'], ['/arcade-games.js', 'arcade-games.js'], ['/web-games.js', 'web-games.js'], ['/site-logo.svg', 'site-logo.svg'], ['/site-logo.jpg', 'site-logo.jpg'], ['/classroom-background.jpg', 'classroom-background.jpg']]);
+    const staticFiles = new Map([
+        ['/', 'index.html'],
+        ['/index.html', 'index.html'],
+        ['/arcade.css', 'arcade.css'],
+        ['/arcade.js', 'arcade.js'],
+        ['/arcade-games.js', 'arcade-games.js'],
+        ['/web-games.js', 'web-games.js'],
+        ['/site-logo.svg', 'site-logo.svg'],
+        ['/site-logo.jpg', 'site-logo.jpg'],
+        ['/classroom-background.jpg', 'classroom-background.jpg'],
+        ['/assets/game-covers/granny-1.png', 'assets/game-covers/granny-1.png'],
+        ['/assets/game-covers/fnaf-2.jpg', 'assets/game-covers/fnaf-2.jpg'],
+        ['/assets/game-covers/fnaf-3.jpg', 'assets/game-covers/fnaf-3.jpg'],
+        ['/assets/game-covers/fnaf-4.jpg', 'assets/game-covers/fnaf-4.jpg'],
+        ['/assets/game-covers/fnaf-sister-location.jpg', 'assets/game-covers/fnaf-sister-location.jpg'],
+        ['/assets/game-covers/fnaf-ucn.jpg', 'assets/game-covers/fnaf-ucn.jpg'],
+        ['/assets/game-covers/thats-not-my-neighbor.jpg', 'assets/game-covers/thats-not-my-neighbor.jpg'],
+        ['/assets/game-covers/bendy.jpg', 'assets/game-covers/bendy.jpg']
+    ]);
     const file = staticFiles.get(url.pathname);
     if (!file || request.method !== 'GET') {
         response.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
