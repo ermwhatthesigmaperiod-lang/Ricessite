@@ -40,7 +40,7 @@ const clientGroups = [
 
 const clientsView = document.getElementById('clientsView');
 clientsView.innerHTML = `
-    <div class="page-heading clients-heading"><div><small class="eyebrow">BROWSER CLIENTS</small><h1>Clients<span>.</span></h1><p>Choose a link to open it in an embedded window.</p></div><span class="local-label">${clientEntries.filter((entry) => entry.category !== 'games').length} LINKS</span></div>
+    <div class="page-heading clients-heading"><div><small class="eyebrow">EAGLERCRAFT CLIENTS</small><h1>Eaglercraft Clients<span>.</span></h1><p>Choose a link to open it in an embedded window.</p></div><span class="local-label">${clientEntries.filter((entry) => entry.category !== 'games').length} LINKS</span></div>
     <div class="client-groups">${clientGroups.map((group) => `<section class="client-group" aria-labelledby="group-${group.id}"><header><div><h2 id="group-${group.id}">${group.title}</h2><p>${group.description}</p></div></header><div class="client-grid">${clientEntries.filter((entry) => entry.category === group.id).map((entry) => { const index = clientEntries.indexOf(entry); return `<button type="button" class="client-card" data-client="${index}"><span class="client-version">${entry.version}</span><strong>${entry.name}</strong><small>Open embedded window <b>↗</b></small></button>`; }).join('')}</div></section>`).join('')}</div>`;
 
 const externalGameCards = [
@@ -62,7 +62,7 @@ document.querySelector('.arcade-game-grid').insertAdjacentHTML('beforeend', exte
 
 document.querySelector('.arcade-main').insertAdjacentHTML('beforeend', `
     <section id="webGameView" class="web-game-view" hidden>
-        <div class="game-toolbar"><button id="webGameBack" class="back-button" type="button">← Clients</button><span id="webGameCategory">CLIENT WINDOW</span><button id="webGameFullscreen" class="full-button" type="button" title="Fullscreen" aria-label="Fullscreen">⛶</button></div>
+        <div class="game-toolbar"><button id="webGameBack" class="back-button" type="button">← Eaglercraft Clients</button><span id="webGameCategory">CLIENT WINDOW</span><button id="webGameFullscreen" class="full-button" type="button" title="Fullscreen" aria-label="Fullscreen">⛶</button></div>
         <div class="web-game-heading"><div><small id="webGameType">EXTERNAL CLIENT</small><h1 id="webGameTitle"></h1></div><a id="webGameNewTab" href="#" target="_blank" rel="noopener noreferrer">Open in new tab ↗</a></div>
         <div class="web-window"><div class="web-window-bar"><span class="window-lights"><i></i><i></i><i></i></span><span id="webGameAddress"></span><span class="window-mark">RICE ARCADE</span></div><iframe id="webGameFrame" title="External client" allow="fullscreen; gamepad; pointer-lock" allowfullscreen loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads allow-modals"></iframe></div>
         <p id="webGameNote" class="web-game-note">External site. If it stays blank, that site may block embedding; use “Open in new tab”.</p>
@@ -91,7 +91,7 @@ function openWebGame(index, returnPage = 'clients') {
     document.getElementById('webGameTitle').textContent = client.name;
     document.getElementById('webGameCategory').textContent = client.category === 'games' ? 'BROWSER GAME' : `CLIENT / ${client.version}`;
     document.getElementById('webGameType').textContent = client.category === 'games' ? 'EXTERNAL GAME' : 'EXTERNAL CLIENT';
-    document.getElementById('webGameBack').textContent = `← ${returnPage === 'games' ? 'Games' : 'Clients'}`;
+    document.getElementById('webGameBack').textContent = `← ${returnPage === 'games' ? 'Games' : 'Eaglercraft Clients'}`;
     document.getElementById('webGameAddress').textContent = new URL(client.url).host;
     document.getElementById('webGameNewTab').href = client.url;
     document.getElementById('webGameNote').textContent = 'External site. If it stays blank, that site may block embedding; use “Open in new tab”.';
