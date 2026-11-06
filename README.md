@@ -14,7 +14,7 @@ VS Code labels the forwarded port `Rice Arcade`. Codespaces generates the hostna
 
 ## Deploy for other players
 
-Deploy this repository as a Node.js 24 web service, not as static files. The host must allow WebSocket upgrades and provide a persistent disk. Mount that disk as `DATA_DIRECTORY` so chat and scores survive restarts. The app listens on the host-provided `PORT`.
+Deploy this repository as a Node.js 24 web service, not as static files. The host must allow WebSocket upgrades. The current Render Blueprint uses the free plan, which can sleep when idle and has no persistent disk; chat and scores may reset after a restart or redeploy. To preserve them, use a paid host plan with a persistent disk mounted as `DATA_DIRECTORY`. The app listens on the host-provided `PORT`.
 
 Chat and leaderboards are shared by everyone connected to the same deployed service. Chat keeps the most recent 80 messages. Use a nickname and do not post personal information. Score submissions are rate-limited and validated, but they are not authenticated or cheat-proof.
 

@@ -2,15 +2,8 @@ services:
   - type: web
     name: ricessite
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeploy: true
-    envVars:
-      - key: DATA_DIRECTORY
-        value: /var/data
-    disk:
-      name: rice-arcade-data
-      mountPath: /var/data
-      sizeGB: 1
