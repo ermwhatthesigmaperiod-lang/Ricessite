@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="45 88 422 245" role="img" aria-labelledby="logo-title">
+  <title id="logo-title">Rice's Site game controller logo</title>
+  <defs>
+    <linearGradient id="mint" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d9f6ef"/>
+      <stop offset="1" stop-color="#c6eee7"/>
+    </linearGradient>
+    <linearGradient id="shell" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10171d"/>
+      <stop offset=".48" stop-color="#27323b"/>
+      <stop offset="1" stop-color="#070a0e"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="8" fill="url(#mint)"/>
+  <path d="m87 145 47-42 50-2 37 31h74l37-31 50 2 47 42 37 114-39 61-20-4-66-72H179l-66 72-20 4-39-61z" fill="url(#shell)"/>
+  <path d="m87 145 47-42 50-2 37 31-50 38-79 14-22-20z" fill="#090e13"/>
+  <path d="m134 103 50-2 37 31v38h-50l-44-35-20 4z" fill="#14252a"/>
+  <path d="M221 132h74v67h-74z" fill="#071014"/>
+  <path d="m295 132 37-31 50 2 27 34-20-4-44 35h-50z" fill="#05090d"/>
+  <path d="m87 145 79 25-32 78-45 72-20-4-39-61 19-90z" fill="#176d6c"/>
+  <path d="m87 145 79 25-32 78-75-28-10-25z" fill="#238c85"/>
+  <path d="m409 145-79 25 32 78 45 72 20-4 39-61-19-90z" fill="#793db7"/>
+  <path d="m409 145-79 25 32 78 75-28 10-25z" fill="#9a4bd0"/>
+  <path d="m134 103 50-2 37 31h-64l-44-18z" fill="#04080b"/>
+  <path d="m332 132 37-31 50 2 21 21-45 9z" fill="#04080b"/>
+  <path d="m165 170 57-1v78h-75z" fill="#060a0e"/>
+  <path d="m347 170-57-1v78h75z" fill="#060a0e"/>
+  <path d="M145 145h22v78h-22zM117 173h78v22h-78z" fill="#d5f3ed"/>
+  <circle cx="356" cy="157" r="14" fill="#d5f3ed"/>
+  <circle cx="380" cy="181" r="14" fill="#d5f3ed"/>
+  <circle cx="332" cy="181" r="14" fill="#d5f3ed"/>
+  <circle cx="356" cy="205" r="14" fill="#d5f3ed"/>
+  <circle cx="208" cy="236" r="34" fill="#05090d"/>
+  <circle cx="208" cy="236" r="18" fill="#d5f3ed"/>
+  <circle cx="326" cy="236" r="34" fill="#05090d"/>
+  <circle cx="326" cy="236" r="18" fill="#d5f3ed"/>
+  <path d="m248 166 32-1-11 13h-31z" fill="#020609"/>
+  <path d="M87 145 134 103 184 101 221 132h74l37-31 50 2 47 42 37 114-39 61-20-4-66-72H179l-66 72-20 4-39-61z" fill="none" stroke="#05090d" stroke-width="4" stroke-linejoin="round"/>
+</svg>

@@ -1,10 +1,333 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Ricessite</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rice's Game Site</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --background: #10151b;
+            --panel: #192129;
+            --panel-border: #34434c;
+            --text: #f3f5f2;
+            --muted: #aab8ba;
+            --cyan: #62e5d1;
+            --pink: #ff7898;
+        }
+        * { box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: radial-gradient(ellipse at 50% 0%, #243a38 0%, var(--background) 58%);
+            color: var(--text);
+            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+        }
+        .top-navbar {
+            width: min(100%, 1180px);
+            min-height: 76px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid var(--panel-border);
+        }
+        h1 { margin: 0; font-size: 1.35rem; letter-spacing: 0; }
+        .nav-container { display: flex; gap: 6px; }
+        .tab-btn {
+            padding: 9px 14px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            background: transparent;
+            color: var(--muted);
+            font: inherit;
+            cursor: pointer;
+        }
+        .tab-btn:hover, .tab-btn.active { color: var(--text); border-color: #52716d; background: #243633; }
+        .main-content { width: min(100% - 32px, 1120px); margin: 32px auto; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: appear 180ms ease-out; }
+        @keyframes appear { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        h2 { margin: 0 0 20px; font-size: 1.55rem; }
+        p { color: var(--muted); line-height: 1.6; }
+        .games-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+        .game-card { min-width: 0; padding: 18px; border: 1px solid var(--panel-border); border-radius: 6px; background: var(--panel); }
+        .game-card h3 { margin: 0 0 12px; font-size: 1.1rem; }
+        .game-card.brick h3, .game-card.brick .score { color: var(--cyan); }
+        .game-card.snake h3, .game-card.snake .score { color: var(--pink); }
+        .game-stage { position: relative; width: min(100%, 400px); margin: 0 auto; }
+        canvas { display: block; width: 100%; aspect-ratio: 1; height: auto; background: #0e151b; border: 2px solid currentColor; }
+        .brick canvas { color: var(--cyan); }
+        .snake canvas { color: var(--pink); }
+        .score { margin: 0 0 10px; font-weight: 700; }
+        .game-message {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            padding: 16px;
+            background: rgb(9 15 20 / 72%);
+            color: var(--text);
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .game-message[hidden] { display: none; }
+        .start-btn {
+            display: block;
+            margin: 14px auto 0;
+            padding: 9px 15px;
+            border: 0;
+            border-radius: 4px;
+            background: #315d57;
+            color: white;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .start-btn:hover { background: #41766d; }
+        .game-help { margin: 12px 0 0; font-size: 0.9rem; text-align: center; }
+        @media (max-width: 700px) {
+            .top-navbar { align-items: flex-start; flex-direction: column; gap: 10px; padding: 16px; }
+            .nav-container { width: 100%; }
+            .tab-btn { flex: 1; padding-inline: 8px; }
+            .games-grid { grid-template-columns: 1fr; }
+            .main-content { margin-top: 22px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; scroll-behavior: auto !important; }
+        }
+    </style>
+    <link rel="stylesheet" href="arcade.css">
 </head>
 <body>
-    <h1>Welcome to Ricessite!</h1>
-    <p>This page was built directly inside a GitHub Codespace terminal.</p>
+    <header class="top-navbar">
+        <h1>Rice's Game Site</h1>
+        <nav class="nav-container" aria-label="Main navigation">
+            <button class="tab-btn active" type="button" data-tab="games" aria-selected="true">Games</button>
+            <button class="tab-btn" type="button" data-tab="chat" aria-selected="false">Chat</button>
+            <button class="tab-btn" type="button" data-tab="about" aria-selected="false">About Me</button>
+        </nav>
+    </header>
+    <main class="main-content">
+        <section id="games" class="tab-content active" aria-labelledby="games-title">
+            <h2 id="games-title">Featured Arcade Arena</h2>
+            <div class="games-grid">
+                <article class="game-card brick">
+                    <h3>Neon Brick Breaker</h3>
+                    <p class="score">Score: <span id="brickScore">0</span></p>
+                    <div class="game-stage">
+                        <canvas id="brickCanvas" width="400" height="400" aria-label="Brick Breaker game board"></canvas>
+                        <div id="brickMessage" class="game-message">Press Start to play</div>
+                    </div>
+                    <button id="brickStart" class="start-btn" type="button">Start Brick Breaker</button>
+                    <p class="game-help">Move the paddle with the left/right arrows or your mouse.</p>
+                </article>
+                <article class="game-card snake">
+                    <h3>Classic Retro Snake</h3>
+                    <p class="score">Score: <span id="snakeScore">0</span></p>
+                    <div class="game-stage">
+                        <canvas id="snakeCanvas" width="400" height="400" aria-label="Snake game board"></canvas>
+                        <div id="snakeMessage" class="game-message">Press Start to play</div>
+                    </div>
+                    <button id="snakeStart" class="start-btn" type="button">Start Snake</button>
+                    <p class="game-help">Use the arrow keys to collect fruit. Avoid your tail.</p>
+                </article>
+            </div>
+        </section>
+        <section id="chat" class="tab-content" aria-labelledby="chat-title">
+            <h2 id="chat-title">Community Chat</h2>
+            <p>Chat space placeholder. Connect a real-time messaging system or Discord widget here later.</p>
+        </section>
+        <section id="about" class="tab-content" aria-labelledby="about-title">
+            <h2 id="about-title">About Me</h2>
+            <p>Welcome to my corner of the web! I built this gaming hub using a cloud-hosted development environment.</p>
+        </section>
+    </main>
+    <script>
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabPanels = document.querySelectorAll('.tab-content');
+        tabButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                tabButtons.forEach((tab) => {
+                    const selected = tab === button;
+                    tab.classList.toggle('active', selected);
+                    tab.setAttribute('aria-selected', String(selected));
+                });
+                tabPanels.forEach((panel) => panel.classList.toggle('active', panel.id === button.dataset.tab));
+            });
+        });
+
+        const brickCanvas = document.getElementById('brickCanvas');
+        const brickContext = brickCanvas.getContext('2d');
+        const brickMessage = document.getElementById('brickMessage');
+        const brickScore = document.getElementById('brickScore');
+        const paddleWidth = 76;
+        let brickFrame = 0;
+        let brickState;
+
+        function startBrickBreaker() {
+            cancelAnimationFrame(brickFrame);
+            brickState = {
+                x: 200, y: 330, dx: 3, dy: -3, paddleX: 162, score: 0,
+                bricks: Array.from({ length: 15 }, (_, index) => ({
+                    x: 28 + (index % 5) * 70,
+                    y: 48 + Math.floor(index / 5) * 30,
+                    active: true
+                }))
+            };
+            brickScore.textContent = '0';
+            brickMessage.hidden = true;
+            drawBrickBreaker();
+        }
+
+        function finishBrickBreaker(message) {
+            cancelAnimationFrame(brickFrame);
+            brickMessage.textContent = message;
+            brickMessage.hidden = false;
+        }
+
+        function drawBrickBreaker() {
+            const state = brickState;
+            brickContext.clearRect(0, 0, brickCanvas.width, brickCanvas.height);
+            state.bricks.forEach((brick) => {
+                if (!brick.active) return;
+                brickContext.fillStyle = '#62e5d1';
+                brickContext.fillRect(brick.x, brick.y, 58, 18);
+            });
+            state.x += state.dx;
+            state.y += state.dy;
+            if (state.x < 7 || state.x > brickCanvas.width - 7) state.dx *= -1;
+            if (state.y < 7) state.dy = Math.abs(state.dy);
+            if (state.y >= 378 && state.y <= 390 && state.x >= state.paddleX && state.x <= state.paddleX + paddleWidth) {
+                state.dy = -Math.abs(state.dy);
+                state.dx = ((state.x - (state.paddleX + paddleWidth / 2)) / (paddleWidth / 2)) * 4;
+            } else if (state.y > brickCanvas.height) {
+                finishBrickBreaker('Game over. Press Start to try again.');
+                return;
+            }
+            const hitBrick = state.bricks.find((brick) => brick.active && state.x >= brick.x && state.x <= brick.x + 58 && state.y >= brick.y && state.y <= brick.y + 18);
+            if (hitBrick) {
+                hitBrick.active = false;
+                state.dy *= -1;
+                state.score += 1;
+                brickScore.textContent = String(state.score);
+                if (state.score === state.bricks.length) {
+                    finishBrickBreaker('You cleared the board! Press Start to play again.');
+                    return;
+                }
+            }
+            brickContext.fillStyle = '#ff7898';
+            brickContext.beginPath();
+            brickContext.arc(state.x, state.y, 7, 0, Math.PI * 2);
+            brickContext.fill();
+            brickContext.fillStyle = '#f3f5f2';
+            brickContext.fillRect(state.paddleX, 386, paddleWidth, 8);
+            brickFrame = requestAnimationFrame(drawBrickBreaker);
+        }
+
+        document.getElementById('brickStart').addEventListener('click', startBrickBreaker);
+        document.addEventListener('keydown', (event) => {
+            if (!brickState) return;
+            if (event.key === 'ArrowLeft') brickState.paddleX = Math.max(0, brickState.paddleX - 24);
+            if (event.key === 'ArrowRight') brickState.paddleX = Math.min(brickCanvas.width - paddleWidth, brickState.paddleX + 24);
+        });
+        brickCanvas.addEventListener('pointermove', (event) => {
+            if (!brickState) return;
+            const bounds = brickCanvas.getBoundingClientRect();
+            const pointerX = (event.clientX - bounds.left) * (brickCanvas.width / bounds.width);
+            brickState.paddleX = Math.max(0, Math.min(brickCanvas.width - paddleWidth, pointerX - paddleWidth / 2));
+        });
+
+        const snakeCanvas = document.getElementById('snakeCanvas');
+        const snakeContext = snakeCanvas.getContext('2d');
+        const snakeMessage = document.getElementById('snakeMessage');
+        const snakeScore = document.getElementById('snakeScore');
+        const gridSize = 20;
+        let snakeTimer = 0;
+        let snakeState;
+
+        function startSnake() {
+            clearInterval(snakeTimer);
+            snakeState = {
+                x: 200, y: 200, dx: gridSize, dy: 0,
+                cells: [{ x: 200, y: 200 }, { x: 180, y: 200 }, { x: 160, y: 200 }],
+                length: 3, score: 0, apple: { x: 300, y: 200 }
+            };
+            snakeScore.textContent = '0';
+            snakeMessage.hidden = true;
+            drawSnake();
+            snakeTimer = setInterval(moveSnake, 110);
+        }
+
+        function placeApple() {
+            const occupied = new Set(snakeState.cells.map((cell) => `${cell.x},${cell.y}`));
+            const available = [];
+            for (let y = 0; y < snakeCanvas.height; y += gridSize) {
+                for (let x = 0; x < snakeCanvas.width; x += gridSize) {
+                    if (!occupied.has(`${x},${y}`)) available.push({ x, y });
+                }
+            }
+            return available[Math.floor(Math.random() * available.length)];
+        }
+
+        function endSnake() {
+            clearInterval(snakeTimer);
+            snakeMessage.textContent = 'Game over. Press Start to play again.';
+            snakeMessage.hidden = false;
+        }
+
+        function moveSnake() {
+            const state = snakeState;
+            state.x += state.dx;
+            state.y += state.dy;
+            if (state.x < 0 || state.x >= snakeCanvas.width || state.y < 0 || state.y >= snakeCanvas.height) {
+                endSnake();
+                return;
+            }
+            state.cells.unshift({ x: state.x, y: state.y });
+            if (state.x === state.apple.x && state.y === state.apple.y) {
+                state.length += 1;
+                state.score += 10;
+                snakeScore.textContent = String(state.score);
+                state.apple = placeApple();
+                if (!state.apple) {
+                    snakeMessage.textContent = 'You filled the board! Press Start to play again.';
+                    snakeMessage.hidden = false;
+                    clearInterval(snakeTimer);
+                    return;
+                }
+            }
+            while (state.cells.length > state.length) state.cells.pop();
+            if (state.cells.slice(1).some((cell) => cell.x === state.x && cell.y === state.y)) {
+                endSnake();
+                return;
+            }
+            drawSnake();
+        }
+
+        function drawSnake() {
+            snakeContext.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+            if (!snakeState) return;
+            snakeContext.fillStyle = '#ff7898';
+            snakeContext.fillRect(snakeState.apple.x + 3, snakeState.apple.y + 3, gridSize - 6, gridSize - 6);
+            snakeContext.fillStyle = '#62e5d1';
+            snakeState.cells.forEach((cell) => snakeContext.fillRect(cell.x + 1, cell.y + 1, gridSize - 2, gridSize - 2));
+        }
+
+        document.getElementById('snakeStart').addEventListener('click', startSnake);
+        document.addEventListener('keydown', (event) => {
+            if (!snakeState || !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+            event.preventDefault();
+            const state = snakeState;
+            if (event.key === 'ArrowLeft' && state.dx === 0) { state.dx = -gridSize; state.dy = 0; }
+            if (event.key === 'ArrowRight' && state.dx === 0) { state.dx = gridSize; state.dy = 0; }
+            if (event.key === 'ArrowUp' && state.dy === 0) { state.dx = 0; state.dy = -gridSize; }
+            if (event.key === 'ArrowDown' && state.dy === 0) { state.dx = 0; state.dy = gridSize; }
+        });
+    </script>
+    <script type="module" src="arcade.js"></script>
 </body>
 </html>
